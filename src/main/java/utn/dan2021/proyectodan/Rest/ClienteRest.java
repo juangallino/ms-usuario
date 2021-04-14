@@ -7,14 +7,7 @@ import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +23,7 @@ public class ClienteRest {
     private static final List<Cliente> listaClientes = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
+
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Cliente> clientePorId(@PathVariable Integer id){
@@ -42,11 +36,14 @@ public class ClienteRest {
     }
 
     @GetMapping
+    @ApiOperation(value = "Busta todos los clientes")
     public ResponseEntity<List<Cliente>> todos(){
         return ResponseEntity.ok(listaClientes);
     }
 
+
     @PostMapping
+    @ApiOperation(value = "Alta de un Cliente ")
     public ResponseEntity<Cliente> crear(@RequestBody Cliente nuevo){
         System.out.println(" crear cliente "+nuevo);
         nuevo.setId(ID_GEN++);
@@ -60,8 +57,7 @@ public class ClienteRest {
             @ApiResponse(code = 200, message = "Actualizado correctamente"),
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
-            @ApiResponse(code = 404, message = "El ID no existe")
-    })
+            @ApiResponse(code = 404, message = "El ID no existe")})
     public ResponseEntity<Cliente> actualizar(@RequestBody Cliente nuevo,  @PathVariable Integer id){
         OptionalInt indexOpt =   IntStream.range(0, listaClientes.size())
                 .filter(i -> listaClientes.get(i).getId().equals(id))
@@ -76,6 +72,7 @@ public class ClienteRest {
     }
 
     @DeleteMapping(path = "/{id}")
+    @ApiOperation(value = "Actualiza un cliente")
     public ResponseEntity<Cliente> borrar(@PathVariable Integer id){
         OptionalInt indexOpt =   IntStream.range(0, listaClientes.size())
                 .filter(i -> listaClientes.get(i).getId().equals(id))
@@ -87,6 +84,42 @@ public class ClienteRest {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+//todo nose xq no responde
+    //solicitado en guia 1
+    @GetMapping(path = "/cuit/{cuit}")
+    @ApiOperation(value = "Busca un cliente por cuit")
+    public ResponseEntity<Cliente> clientePorCuit(@PathVariable Long cuit){
+
+        Optional<Cliente> c =  listaClientes
+                .stream()
+                .filter(unCli -> unCli.getCuit().equals(cuit))
+                .findFirst();
+      //  return ResponseEntity.of(c);
+        if(c.isPresent()){
+
+            return ResponseEntity.of(c);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping(path = "qry")
+    @ApiOperation(value = "Busca un cliente por Razon Social utilizano qry")
+    public ResponseEntity<Cliente> clientePorRazonSocial(@RequestParam(required = false, value = "rz") String rz){
+
+        Optional<Cliente> c =  listaClientes
+                .stream()
+                .filter(unCli -> unCli.getRazonSocial(). equals(rz))
+                .findFirst();
+        if(c.isPresent()){
+
+            return ResponseEntity.of(c);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 

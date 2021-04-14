@@ -8,8 +8,10 @@ public class Obra {
 	private Float longitud;
 	private String direccion;
 	private Integer superficie;
-	private utn.dan2021.proyectodan.Domain.TipoObra tipo;
-	private utn.dan2021.proyectodan.Domain.Cliente cliente;
+	private TipoObra tipo;
+	private Cliente cliente;
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -46,6 +48,7 @@ public class Obra {
 	public void setSuperficie(Integer superficie) {
 		this.superficie = superficie;
 	}
+
 	public utn.dan2021.proyectodan.Domain.TipoObra getTipo() {
 		return tipo;
 	}

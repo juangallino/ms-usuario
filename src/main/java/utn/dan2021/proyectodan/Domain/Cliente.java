@@ -2,16 +2,18 @@ package utn.dan2021.proyectodan.Domain;
 
 import java.util.List;
 
-public class Cliente {
+public class Cliente  {
 	
     private Integer id;
     private String razonSocial;
-    private String cuit;
+    private Long cuit;
     private String mail;
     private Double maxCuentaCorriente;
     private Boolean habilitadoOnline;
     private Usuario user;
     private List<Obra> obras;
+
+    //Getters y Setters
 	public Integer getId() {
 		return id;
 	}
@@ -24,10 +26,10 @@ public class Cliente {
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
 	}
-	public String getCuit() {
+	public Long getCuit() {
 		return cuit;
 	}
-	public void setCuit(String cuit) {
+	public void setCuit(Long cuit) {
 		this.cuit = cuit;
 	}
 	public String getMail() {

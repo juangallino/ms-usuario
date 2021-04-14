@@ -8,6 +8,8 @@ public class DanMsUsuariosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DanMsUsuariosApplication.class, args);
+		System.out.println("Hola proyecto spring");
 	}
+
 
 }
