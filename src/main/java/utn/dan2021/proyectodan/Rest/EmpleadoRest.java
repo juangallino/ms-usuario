@@ -54,7 +54,7 @@ public class EmpleadoRest {
     }
 
 
-    //TODO EL UPDATE PISA EL ID Y LO DEJA NULL
+    //TODO EL UPDATE PISA EL ID Y LO DEJA NULL.//UPDATE: CORREGIDO FALTA PROBAR
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza un cliente")
     @ApiResponses(value = {
@@ -68,6 +68,7 @@ public class EmpleadoRest {
                 .findFirst();
 
         if(indexOpt.isPresent()){
+           nuevo.setId(listaEmpleados.get(indexOpt.getAsInt()).getId());   //conservar el id
             listaEmpleados.set(indexOpt.getAsInt(), nuevo);
             return ResponseEntity.ok(nuevo);
         } else {

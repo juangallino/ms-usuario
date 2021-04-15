@@ -16,7 +16,7 @@ public class SpringFoxConfig {
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  
           .select()                                  
-          .apis(RequestHandlerSelectors.basePackage("dan.tp2021.usuarios.rest"))              
+          .apis(RequestHandlerSelectors.basePackage("utn.dan2021.proyectodan.Rest"))
           .paths(PathSelectors.any())                          
           .build();                                           
     }

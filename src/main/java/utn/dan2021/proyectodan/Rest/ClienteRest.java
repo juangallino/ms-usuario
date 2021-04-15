@@ -59,6 +59,7 @@ public class ClienteRest {
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
     public ResponseEntity<Cliente> actualizar(@RequestBody Cliente nuevo,  @PathVariable Integer id){
+
         OptionalInt indexOpt =   IntStream.range(0, listaClientes.size())
                 .filter(i -> listaClientes.get(i).getId().equals(id))
                 .findFirst();
@@ -85,7 +86,7 @@ public class ClienteRest {
             return ResponseEntity.notFound().build();
         }
     }
-//todo nose xq no responde
+
     //solicitado en guia 1
     @GetMapping(path = "/cuit/{cuit}")
     @ApiOperation(value = "Busca un cliente por cuit")
