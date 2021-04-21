@@ -4,6 +4,8 @@ public class TipoObra {
 
 	private Integer id;
 	private String descripcion;
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -13,6 +15,7 @@ public class TipoObra {
 	public String getDescripcion() {
 		return descripcion;
 	}
+
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}

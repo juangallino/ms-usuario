@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import utn.dan2021.proyectodan.Domain.Cliente;
+import utn.dan2021.proyectodan.Service.ClienteService;
 
 @RestController
 @RequestMapping("/api/cliente")
@@ -24,6 +27,10 @@ public class ClienteRest {
     private static Integer ID_GEN = 1;
 
 
+    @Autowired
+    ClienteService clienteService;
+
+
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Cliente> clientePorId(@PathVariable Integer id){
@@ -32,23 +39,38 @@ public class ClienteRest {
                 .stream()
                 .filter(unCli -> unCli.getId().equals(id))
                 .findFirst();
+
         return ResponseEntity.of(c);
+        //Cliente cl = clienteService.buscarClientePorId(id);
+        //return ResponseEntity.ok(cl);
     }
 
     @GetMapping
     @ApiOperation(value = "Busta todos los clientes")
     public ResponseEntity<List<Cliente>> todos(){
+
         return ResponseEntity.ok(listaClientes);
     }
 
 
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
-    public ResponseEntity<Cliente> crear(@RequestBody Cliente nuevo){
+    public ResponseEntity<String> crear(@RequestBody Cliente nuevo){
         System.out.println(" crear cliente "+nuevo);
         nuevo.setId(ID_GEN++);
         listaClientes.add(nuevo);
-        return ResponseEntity.ok(nuevo);
+
+
+        if(nuevo.getObras().isEmpty()) {
+            return ResponseEntity.badRequest().body("No se posee informacion de la obra");
+        }
+        if(nuevo.getUser().getUser().isEmpty() || nuevo.getUser().getPassword().isEmpty() ) {
+            return ResponseEntity.badRequest().body("EL cliente no tiene usuario y contraseña");
+        }
+
+        clienteService.guardarCliente(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+
     }
 
     @PutMapping(path = "/{id}")
@@ -90,7 +112,7 @@ public class ClienteRest {
     //solicitado en guia 1
     @GetMapping(path = "/cuit/{cuit}")
     @ApiOperation(value = "Busca un cliente por cuit")
-    public ResponseEntity<Cliente> clientePorCuit(@PathVariable Long cuit){
+    public ResponseEntity<Cliente> clientePorCuit(@PathVariable String cuit){
 
         Optional<Cliente> c =  listaClientes
                 .stream()

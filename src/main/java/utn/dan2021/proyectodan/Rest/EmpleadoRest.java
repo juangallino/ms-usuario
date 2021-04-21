@@ -77,6 +77,7 @@ public class EmpleadoRest {
     }
 
     @DeleteMapping(path = "/{id}")
+    @ApiOperation(value = "Elimina una Obra")
     public ResponseEntity<Empleado> borrar(@PathVariable Integer id){
         OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
                 .filter(i -> listaEmpleados.get(i).getId().equals(id))

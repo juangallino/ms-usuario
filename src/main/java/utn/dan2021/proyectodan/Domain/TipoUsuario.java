@@ -4,6 +4,7 @@ public class TipoUsuario {
 
 	private Integer id;
 	private String tipo;
+
 	public Integer getId() {
 		return id;
 	}

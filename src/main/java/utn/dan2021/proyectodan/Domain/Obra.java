@@ -1,7 +1,7 @@
 package utn.dan2021.proyectodan.Domain;
 
 public class Obra {
-	
+
 	private Integer id;
 	private String descripcion;
 	private Float latitud;
@@ -10,7 +10,6 @@ public class Obra {
 	private Integer superficie;
 	private TipoObra tipo;
 	private Cliente cliente;
-
 
 	public Integer getId() {
 		return id;
@@ -48,20 +47,23 @@ public class Obra {
 	public void setSuperficie(Integer superficie) {
 		this.superficie = superficie;
 	}
-
-	public utn.dan2021.proyectodan.Domain.TipoObra getTipo() {
+	public TipoObra getTipo() {
 		return tipo;
 	}
-	public void setTipo(utn.dan2021.proyectodan.Domain.TipoObra tipo) {
+	public void setTipo(TipoObra tipo) {
 		this.tipo = tipo;
 	}
-	public utn.dan2021.proyectodan.Domain.Cliente getCliente() {
+	public Cliente getCliente() {
 		return cliente;
 	}
-	public void setCliente(utn.dan2021.proyectodan.Domain.Cliente cliente) {
+	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	
-	
+
+
+
+
+
+
 
 }

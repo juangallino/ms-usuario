@@ -6,12 +6,12 @@ public class Usuario {
 	private Integer id;
 	private String user;
 	private String password;
-	private utn.dan2021.proyectodan.Domain.TipoUsuario tipoUsuario;
+	private TipoUsuario tipoUsuario;
 
-	public utn.dan2021.proyectodan.Domain.TipoUsuario getTipoUsuario() {
+	public TipoUsuario getTipoUsuario() {
 		return tipoUsuario;
 	}
-	public void setTipoUsuario(utn.dan2021.proyectodan.Domain.TipoUsuario tipoUsuario) {
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 	public Integer getId() {

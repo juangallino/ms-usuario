@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import utn.dan2021.proyectodan.Domain.Empleado;
+import utn.dan2021.proyectodan.Domain.Cliente;
 import utn.dan2021.proyectodan.Domain.Obra;
 
 import java.util.ArrayList;
@@ -25,8 +25,11 @@ public class ObraRest {
     private static Integer ID_GEN = 1;
 
 
+                                    // GETS
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
+
     @GetMapping(path = "/{id}")
-    @ApiOperation(value = "Busca un cliente por id")
+    @ApiOperation(value = "Busca una Obra por id")
     public ResponseEntity<Obra> ObraPorId(@PathVariable Integer id){
 
         Optional<Obra> c =  listaObras
@@ -43,6 +46,47 @@ public class ObraRest {
     }
 
 
+
+
+    @GetMapping(path = "/cliente/{idObra}")
+    @ApiOperation(value = "Busca un Cliente por id de la Obra")
+    public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra){
+
+        Optional<Obra> c =  listaObras
+                .stream()
+                .filter(Obra -> Obra.getId().equals(idObra))
+                .findFirst();
+
+        if(c.isPresent()){
+            return ResponseEntity.ok(c.get().getCliente());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+//todo ulitmo get de la guia 1
+    /*@GetMapping(path = "qry")
+    @ApiOperation(value = "Busca un Obra por nombre utilizano qry")
+    public ResponseEntity<Empleado> clientePorRazonSocial(@RequestParam(required = false, value = "nombre") String nombre){
+
+        Optional<Empleado> c =  listaObras
+                .stream()
+                .filter(Obra -> Obra.getNombre(). equals(nombre))
+                .findFirst();
+        //  return ResponseEntity.of(c);
+        if(c.isPresent()){
+
+            return ResponseEntity.of(c);
+        } else {
+            return ResponseEntity.notFound().build();
+        }*/
+
+
+
+                                // POST
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
+
     @PostMapping
     @ApiOperation(value = "Alta de una Obra ")
     public ResponseEntity<Obra> crear(@RequestBody Obra obra){
@@ -51,7 +95,8 @@ public class ObraRest {
         listaObras.add(obra);
         return ResponseEntity.ok(obra);
     }
-
+                            //PUT
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza una Obra")
     @ApiResponses(value = {
@@ -72,7 +117,11 @@ public class ObraRest {
         }
     }
 
+
+                                //DELETE
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
     @DeleteMapping(path = "/{id}")
+    @ApiOperation(value = "Elimina una Obra")
     public ResponseEntity<Obra> borrar(@PathVariable Integer id){
         OptionalInt indexOpt =   IntStream.range(0, listaObras.size())
                 .filter(i -> listaObras.get(i).getId().equals(id))

@@ -6,6 +6,7 @@ public class Empleado {
 	private String mail;
 	private Usuario user;
 	private String nombre;
+
 	public Integer getId() {
 		return id;
 	}
