@@ -10,6 +10,6 @@ public interface ObraService {
     public void bajaObra(Integer id) throws Exception;
     public void actualizarObra(Obra obra, Integer id);
     public List<Obra> listarObras();
-    public Obra buscarObraPorId(Integer id);
+    public Obra buscarObraPorId(Integer id) throws Exception;
 
 }

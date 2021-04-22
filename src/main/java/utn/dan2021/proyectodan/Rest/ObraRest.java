@@ -35,8 +35,11 @@ public class ObraRest {
     @ApiOperation(value = "Busca una Obra por id")
     public ResponseEntity<Obra> ObraPorId(@PathVariable Integer id){
 
-
+        try{
         return ResponseEntity.ok(obraService.buscarObraPorId(id));
+    }catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
@@ -51,20 +54,20 @@ public class ObraRest {
 
     @GetMapping(path = "/cliente/{idObra}")
     @ApiOperation(value = "Busca un Cliente por id de la Obra")
-    public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra){
+    public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra) {
 
         /*Optional<Obra> c =  obraService.listarObras()
                 .stream()
                 .filter(Obra -> Obra.getId().equals(idObra))
                 .findFirst();*/
-        Obra obra= obraService.buscarObraPorId(idObra);
-
-        if(obra!=null){
+        try {
+            Obra obra = obraService.buscarObraPorId(idObra);
             return ResponseEntity.ok(obra.getCliente());
-        } else {
+
+
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-
     }
 
 //todo ulitmo get de la guia 1   Busca un Obra por cliente o tipo de obra()ambos param"

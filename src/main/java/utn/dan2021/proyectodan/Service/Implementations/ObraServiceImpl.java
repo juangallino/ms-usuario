@@ -9,6 +9,7 @@ import utn.dan2021.proyectodan.repository.ObraRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ObraServiceImpl implements ObraService {
@@ -18,13 +19,24 @@ public class ObraServiceImpl implements ObraService {
 
     @Override
     public Obra guardarObra(Obra obra) throws Exception {
-       obraRepository.save(obra);
-       return  obra;
+
+        try{
+            obraRepository.save(obra);
+            return  obra;
+        }
+        catch (Exception e){
+            throw new Exception("not found");
+        }
+
     }
 
     @Override
     public void bajaObra(Integer id) throws Exception {
-            obraRepository.deleteById(id);
+        try{obraRepository.deleteById(id);}
+        catch (Exception e){
+            throw new Exception("not found");
+        }
+
     }
 
     @Override
@@ -42,8 +54,14 @@ public class ObraServiceImpl implements ObraService {
     }
 
     @Override
-    public Obra buscarObraPorId(Integer id) {
-        return obraRepository.findById(id).get();
+    public Obra buscarObraPorId(Integer id) throws Exception {
+
+
+
+        if (obraRepository.findById(id).isPresent()){return obraRepository.findById(id).get();
+        }
+        throw new Exception("not found");
+
     }
 
 
