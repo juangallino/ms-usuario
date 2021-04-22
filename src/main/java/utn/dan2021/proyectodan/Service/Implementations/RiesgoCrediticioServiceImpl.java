@@ -12,7 +12,6 @@ public class RiesgoCrediticioServiceImpl implements RiesgoCrediticioService {
 
     @Override
     public Boolean reporteBCRAPositivo(String cuit) {
-        System.out.println("Paso por riesgo credit");
         return true;
     }
 

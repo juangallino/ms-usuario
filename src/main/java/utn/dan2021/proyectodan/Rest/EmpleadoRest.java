@@ -50,12 +50,12 @@ public class EmpleadoRest {
 
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
-    public ResponseEntity<String> crear(@RequestBody Empleado nuevo) throws Exception {
+    public ResponseEntity<String> crear(@RequestBody Empleado nuevo)  {
         System.out.println(" crear Empleado "+nuevo);
-
-        empleadoService.guardarEmpleado(nuevo);
-       // si quiero retorna la entidad al crearla ResponseEntity.ok(nuevo);
+        try{
+        empleadoService.guardarEmpleado(nuevo);                                                                                    // si quiero retorna la entidad al crearla ResponseEntity.ok(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+    }catch (Exception e){return ResponseEntity.status(HttpStatus.CONFLICT).build();}
     }
 
 
