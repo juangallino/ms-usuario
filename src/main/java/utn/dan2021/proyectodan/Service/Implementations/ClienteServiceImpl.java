@@ -49,9 +49,7 @@ public class ClienteServiceImpl implements ClienteService {
         return c;
     }
 
-    private Cliente updateCliente(Cliente cl) {
-       return cl;
-    }
+
 
     @Override
     public void bajaCliente(Integer id) throws Exception {
@@ -65,6 +63,13 @@ public class ClienteServiceImpl implements ClienteService {
             clienteRepository.deleteById(id);
         }else throw new Exception("no funco");
 
+
+    }
+
+    @Override
+    public void actualizarCliente(Cliente cliente, Integer id) {
+        cliente.setId(id);
+        clienteRepository.save(cliente);
 
     }
 
@@ -85,13 +90,25 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente buscarClientePorCuit(String cuit) {
-        //repo.findbyCuit(cuit);
-        return null;
+
+        List<Cliente> aux = new ArrayList<>();
+        clienteRepository.findAll().forEach(cliente -> aux.add(cliente));				//CONVERT ITERABLE TO lIST
+
+        return aux.stream()
+                .filter(cliente->cliente.getCuit().equals(cuit))
+                .findFirst()
+                .get();
     }
 
     @Override
     public Cliente buscarClientePorRazonSocial(String rz) {
+        List<Cliente> aux = new ArrayList<>();
+        clienteRepository.findAll().forEach(cliente -> aux.add(cliente));				//CONVERT ITERABLE TO lIST
 
-        return null;
+        return aux.stream()
+                .filter(cliente->cliente.getRazonSocial().equals(rz))
+                .findFirst()
+                .get();
+
     }
 }

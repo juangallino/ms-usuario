@@ -28,6 +28,13 @@ public class ObraServiceImpl implements ObraService {
     }
 
     @Override
+    public void actualizarObra(Obra obra, Integer id) {
+        obra.setId(id);
+        obraRepository.save(obra);
+
+    }
+
+    @Override
     public List<Obra> listarObras() {
         List<Obra> result = new ArrayList<>();
         obraRepository.findAll().forEach(Obra -> result.add(Obra));
@@ -38,4 +45,6 @@ public class ObraServiceImpl implements ObraService {
     public Obra buscarObraPorId(Integer id) {
         return obraRepository.findById(id).get();
     }
+
+
 }

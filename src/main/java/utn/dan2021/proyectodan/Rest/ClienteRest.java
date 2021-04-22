@@ -37,7 +37,7 @@ public class ClienteRest {
     }
 
     @GetMapping
-    @ApiOperation(value = "Busta todos los clientes")
+    @ApiOperation(value = "Busca todos los clientes")
     public ResponseEntity<List<Cliente>> todos(){
 
         return ResponseEntity.ok(clienteService.listarClientes());
@@ -68,9 +68,14 @@ public class ClienteRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<String> actualizar(@RequestBody Cliente unCliente,  @PathVariable Integer id) throws Exception {
+    public ResponseEntity<String> actualizar(@RequestBody Cliente unCliente,  @PathVariable Integer id) {
 
-        clienteService.guardarCliente(unCliente);
+        try {
+            clienteService.actualizarCliente(unCliente,id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.FOUND).body("FAIL");
+        }
+
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
     }
@@ -81,7 +86,7 @@ public class ClienteRest {
         try {
             clienteService.bajaCliente(id);
             String respuesta = "ok "+id;
-            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta );
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(respuesta );
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -90,10 +95,10 @@ public class ClienteRest {
     //solicitado en guia 1
     @GetMapping(path = "/cuit/{cuit}")
     @ApiOperation(value = "Busca un cliente por cuit")
-    public Object clientePorCuit(@PathVariable String cuit){
+    public ResponseEntity<Cliente> clientePorCuit(@PathVariable String cuit){
 
         try {
-           return clienteService.buscarClientePorCuit(cuit);
+           return ResponseEntity.ok(clienteService.buscarClientePorCuit(cuit));
 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -106,7 +111,7 @@ public class ClienteRest {
     public ResponseEntity<Cliente> clientePorRazonSocial(@RequestParam(required = false, value = "rz") String rz){
 
         try {
-            return ResponseEntity.ok(clienteService.buscarClientePorRazonSocial(rz));
+                return ResponseEntity.ok(clienteService.buscarClientePorRazonSocial(rz));
 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

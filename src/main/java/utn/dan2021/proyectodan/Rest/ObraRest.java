@@ -57,34 +57,34 @@ public class ObraRest {
                 .stream()
                 .filter(Obra -> Obra.getId().equals(idObra))
                 .findFirst();*/
-        Obra c= obraService.buscarObraPorId(idObra);
+        Obra obra= obraService.buscarObraPorId(idObra);
 
-        if(c!=null){
-            return ResponseEntity.ok(c.getCliente());
+        if(obra!=null){
+            return ResponseEntity.ok(obra.getCliente());
         } else {
             return ResponseEntity.notFound().build();
         }
 
     }
 
-//todo ulitmo get de la guia 1
-    /*@GetMapping(path = "qry")
-    @ApiOperation(value = "Busca un Obra por nombre utilizano qry")
-    public ResponseEntity<Empleado> clientePorRazonSocial(@RequestParam(required = false, value = "nombre") String nombre){
+//todo ulitmo get de la guia 1   Busca un Obra por cliente o tipo de obra()ambos param"
+  /*  @GetMapping(path = "qry")
+    @ApiOperation(value = "Busca un Obra por cliente o tipo de obra()ambos param")
+    public ResponseEntity<Empleado> obrita(@RequestParam(required = false, value = "nombre") String nombre) {
 
-        Optional<Empleado> c =  listaObras
+        Optional<Empleado> c = listaObras
                 .stream()
-                .filter(Obra -> Obra.getNombre(). equals(nombre))
+                .filter(Obra -> Obra.getNombre().equals(nombre))
                 .findFirst();
         //  return ResponseEntity.of(c);
-        if(c.isPresent()){
+        if (c.isPresent()) {
 
             return ResponseEntity.of(c);
         } else {
             return ResponseEntity.notFound().build();
-        }*/
+        }
 
-
+    }*/
 
                                 // POST
     //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -94,8 +94,11 @@ public class ObraRest {
     public ResponseEntity<String> crear(@RequestBody Obra obra) throws Exception {
         System.out.println(" crear Empleado "+obra);
 
-        obraService.guardarObra(obra);
-        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+        try{
+            obraService.guardarObra(obra);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();}
     }
                             //PUT
     //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,11 +109,14 @@ public class ObraRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<String> actualizar(@RequestBody Obra obra,  @PathVariable Integer id) throws Exception {
+    public ResponseEntity<String> actualizar(@RequestBody Obra obra,  @PathVariable Integer id)  {
 
-        obraService.guardarObra(obra);
+        try{
+            obraService.actualizarObra(obra, id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
+       }catch (Exception e){
+            return ResponseEntity.notFound().build();}
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
     }
 
 
@@ -127,23 +133,6 @@ public class ObraRest {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-    /*@GetMapping(path = "qry")
-    @ApiOperation(value = "Busca un Obra por nombre utilizano qry")
-    public ResponseEntity<Empleado> clientePorRazonSocial(@RequestParam(required = false, value = "nombre") String nombre){
-
-        Optional<Empleado> c =  listaObras
-                .stream()
-                .filter(Obra -> Obra.getNombre(). equals(nombre))
-                .findFirst();
-        //  return ResponseEntity.of(c);
-        if(c.isPresent()){
-
-            return ResponseEntity.of(c);
-        } else {
-            return ResponseEntity.notFound().build();
-        }*/
 
     }
 

@@ -59,7 +59,6 @@ public class EmpleadoRest {
     }
 
 
-    //TODO EL UPDATE PISA EL ID Y LO DEJA NULL.//UPDATE: CORREGIDO FALTA PROBAR
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza un cliente")
     @ApiResponses(value = {
@@ -67,10 +66,14 @@ public class EmpleadoRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo,  @PathVariable Integer id) throws Exception {
+    public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo,  @PathVariable Integer id) {
+        try {
+            empleadoService.actualizarEmpleado(nuevo, id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
 
-        empleadoService.guardarEmpleado(nuevo);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
     }
 
     @DeleteMapping(path = "/{id}")
@@ -89,10 +92,12 @@ public class EmpleadoRest {
     @GetMapping(path = "qry")
     @ApiOperation(value = "Busca un empleado por nombre utilizano qry")
     public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false, value = "name") String name){
-                //todo
-              //  return ResponseEntity.of(c);
-              return ResponseEntity.notFound().build();
-        }
+                empleadoService.buscarEmpleadoPorNombre(name);
+                try{
+              return ResponseEntity.ok(empleadoService.buscarEmpleadoPorNombre(name));
+        }catch (Exception e){
+                    return ResponseEntity.notFound().build();}
+    }
 
     }
 

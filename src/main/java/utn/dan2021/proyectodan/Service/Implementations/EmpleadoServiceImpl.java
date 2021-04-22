@@ -24,6 +24,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
+    public void actualizarEmpleado(Empleado empleado, Integer Id) {
+        empleado.setId(Id);
+        empleadoRepository.save(empleado);
+
+
+    }
+
+    @Override
     public void bajaEmpleado(Integer id) throws Exception {
         empleadoRepository.deleteById(id);
 
@@ -40,5 +48,16 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public Empleado buscarEmpleadoPorId(Integer id) {
 
        return empleadoRepository.findById(id).get();
+    }
+
+    @Override
+    public Empleado buscarEmpleadoPorNombre(String nombre) {
+        List<Empleado> result = new ArrayList<>();
+        empleadoRepository.findAll().forEach(empleado -> result.add(empleado));
+       return result.stream()
+                .filter(e->e.getNombre().equals(nombre))
+               .findFirst()
+               .get();
+
     }
 }
