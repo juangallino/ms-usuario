@@ -2,6 +2,7 @@ package utn.dan2021.proyectodan.Service.Implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import utn.dan2021.proyectodan.Domain.Empleado;
 import utn.dan2021.proyectodan.Domain.Obra;
 import utn.dan2021.proyectodan.Service.ObraService;
@@ -11,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
+@Transactional
 public class ObraServiceImpl implements ObraService {
 
     @Autowired
@@ -58,7 +61,8 @@ public class ObraServiceImpl implements ObraService {
 
 
 
-        if (obraRepository.findById(id).isPresent()){return obraRepository.findById(id).get();
+        if (obraRepository.findById(id).isPresent()){
+            return obraRepository.findById(id).get();
         }
         throw new Exception("not found");
 

@@ -4,6 +4,7 @@ import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import utn.dan2021.proyectodan.Domain.Cliente;
 import utn.dan2021.proyectodan.Service.ClienteService;
 import utn.dan2021.proyectodan.Service.RiesgoCrediticioService;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Service
+@Transactional
 public class ClienteServiceImpl implements ClienteService {
 
 

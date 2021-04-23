@@ -35,8 +35,12 @@ public class EmpleadoRest {
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Empleado> clientePorId(@PathVariable Integer id){
 
-        Empleado emp = empleadoService.buscarEmpleadoPorId(id);
-        return ResponseEntity.ok(emp);
+
+        try{
+            Empleado emp = empleadoService.buscarEmpleadoPorId(id);
+            return ResponseEntity.ok(emp);
+
+        }catch (Exception e){return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
     }
 
     @GetMapping

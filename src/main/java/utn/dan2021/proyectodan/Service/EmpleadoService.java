@@ -7,10 +7,10 @@ import java.util.List;
 public interface EmpleadoService {
 
     public Empleado guardarEmpleado(Empleado empleado) throws Exception;
-    public void actualizarEmpleado(Empleado empleado, Integer Id);
+    public void actualizarEmpleado(Empleado empleado, Integer Id) throws Exception;
     public void bajaEmpleado(Integer id) throws Exception;
     public List<Empleado> listarEmpleados();
-    public Empleado buscarEmpleadoPorId(Integer id);
+    public Empleado buscarEmpleadoPorId(Integer id) throws Exception;
     public Empleado buscarEmpleadoPorNombre(String nombre);
 
 }
