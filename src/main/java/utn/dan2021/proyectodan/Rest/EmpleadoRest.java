@@ -4,9 +4,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utn.dan2021.proyectodan.Domain.Cliente;
 import utn.dan2021.proyectodan.Domain.Empleado;
+import utn.dan2021.proyectodan.Service.ClienteService;
+import utn.dan2021.proyectodan.Service.EmpleadoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,39 +27,42 @@ import java.util.stream.IntStream;
 @Api(value = "EmpleadoRest", description = "Permite gestionar los empelados de la empresa")
 public class EmpleadoRest {
 
-    private static final List<Empleado> listaEmpleados = new ArrayList<>();
-    private static Integer ID_GEN = 1;
+    @Autowired
+    EmpleadoService empleadoService;
 
 
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Empleado> clientePorId(@PathVariable Integer id){
 
-        Optional<Empleado> c =  listaEmpleados
-                .stream()
-                .filter(empleado -> empleado.getId().equals(id))
-                .findFirst();
-        return ResponseEntity.of(c);
+
+        try{
+            Empleado emp = empleadoService.buscarEmpleadoPorId(id);
+            return ResponseEntity.ok(emp);
+
+        }catch (Exception e){return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
     }
 
     @GetMapping
     @ApiOperation(value = "Busta todos los clientes")
     public ResponseEntity<List<Empleado>> todos(){
-        return ResponseEntity.ok(listaEmpleados);
+
+    return ResponseEntity.ok(empleadoService.listarEmpleados());
+
     }
 
 
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
-    public ResponseEntity<Empleado> crear(@RequestBody Empleado nuevo){
+    public ResponseEntity<String> crear(@RequestBody Empleado nuevo)  {
         System.out.println(" crear Empleado "+nuevo);
-        nuevo.setId(ID_GEN++);
-        listaEmpleados.add(nuevo);
-        return ResponseEntity.ok(nuevo);
+        try{
+        empleadoService.guardarEmpleado(nuevo);                                                                                    // si quiero retorna la entidad al crearla ResponseEntity.ok(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+    }catch (Exception e){return ResponseEntity.status(HttpStatus.CONFLICT).build();}
     }
 
 
-    //TODO EL UPDATE PISA EL ID Y LO DEJA NULL.//UPDATE: CORREGIDO FALTA PROBAR
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza un cliente")
     @ApiResponses(value = {
@@ -62,31 +70,24 @@ public class EmpleadoRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo,  @PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-                .filter(i -> listaEmpleados.get(i).getId().equals(id))
-                .findFirst();
-
-        if(indexOpt.isPresent()){
-           nuevo.setId(listaEmpleados.get(indexOpt.getAsInt()).getId());   //conservar el id
-            listaEmpleados.set(indexOpt.getAsInt(), nuevo);
-            return ResponseEntity.ok(nuevo);
-        } else {
+    public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo,  @PathVariable Integer id) {
+        try {
+            empleadoService.actualizarEmpleado(nuevo, id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
+
         }
     }
 
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina una Obra")
-    public ResponseEntity<Empleado> borrar(@PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-                .filter(i -> listaEmpleados.get(i).getId().equals(id))
-                .findFirst();
-
-        if(indexOpt.isPresent()){
-            listaEmpleados.remove(indexOpt.getAsInt());
-            return ResponseEntity.ok().build();
-        } else {
+    public ResponseEntity<String> borrar(@PathVariable Integer id){
+        try {
+            empleadoService.bajaEmpleado(id);
+            String respuesta = "ok "+id;
+            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta );
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -95,20 +96,14 @@ public class EmpleadoRest {
     @GetMapping(path = "qry")
     @ApiOperation(value = "Busca un empleado por nombre utilizano qry")
     public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false, value = "name") String name){
-
-        Optional<Empleado> c =  listaEmpleados
-                .stream()
-                .filter(empleado -> empleado.getNombre(). equals(name))
-                .findFirst();
-        //  return ResponseEntity.of(c);
-        if(c.isPresent()){
-
-            return ResponseEntity.of(c);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+                empleadoService.buscarEmpleadoPorNombre(name);
+                try{
+              return ResponseEntity.ok(empleadoService.buscarEmpleadoPorNombre(name));
+        }catch (Exception e){
+                    return ResponseEntity.notFound().build();}
+    }
 
     }
 
 
-}
+
