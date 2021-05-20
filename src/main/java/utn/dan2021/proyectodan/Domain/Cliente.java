@@ -1,16 +1,33 @@
 package utn.dan2021.proyectodan.Domain;
 
+import javax.persistence.*;
 import java.util.List;
 
+
+@Entity
 public class Cliente  {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column
 	private String razonSocial;
+	@Column
 	private String cuit;
+	@Column
 	private String mail;
+	@Column
 	private Double maxCuentaCorriente;
+	@Column
 	private Boolean habilitadoOnline;
+
+	@OneToOne
 	private Usuario user;
+
+
+	@OneToMany
+	@JoinColumn(name = "obras_ID")
 	private List<Obra> obras;
 
 

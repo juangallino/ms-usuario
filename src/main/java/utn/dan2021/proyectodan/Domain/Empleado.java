@@ -1,11 +1,23 @@
 package utn.dan2021.proyectodan.Domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Empleado {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column
 	private String mail;
+
+	@OneToOne
 	private Usuario user;
+
+	@Column
 	private String nombre;
+
 
 	public Integer getId() {
 		return id;

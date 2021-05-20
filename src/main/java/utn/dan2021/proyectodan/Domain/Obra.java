@@ -1,14 +1,35 @@
 package utn.dan2021.proyectodan.Domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Obra {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column
 	private String descripcion;
+
+	@Column
 	private Float latitud;
+
+	@Column
 	private Float longitud;
+
+	@Column
 	private String direccion;
+
+	@Column
 	private Integer superficie;
+
+	@OneToOne
 	private TipoObra tipo;
+
+
+
+	@ManyToOne
 	private Cliente cliente;
 
 	public Integer getId() {

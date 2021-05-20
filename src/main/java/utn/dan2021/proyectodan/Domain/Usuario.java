@@ -1,11 +1,19 @@
 package utn.dan2021.proyectodan.Domain;
 
+import javax.persistence.*;
+
+
+@Entity
 public class Usuario {
 
-	
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 	private String user;
 	private String password;
+
+	@OneToOne
 	private TipoUsuario tipoUsuario;
 
 	public TipoUsuario getTipoUsuario() {

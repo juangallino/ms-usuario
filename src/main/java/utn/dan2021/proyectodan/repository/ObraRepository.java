@@ -1,19 +1,10 @@
 package utn.dan2021.proyectodan.repository;
 
-import frsf.isi.dan.InMemoryRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import utn.dan2021.proyectodan.Domain.Obra;
 
 @Repository
-public class ObraRepository extends InMemoryRepository<Obra> {
-    @Override
-    public Integer getId(Obra obra) {
+public interface ObraRepository extends JpaRepository<Obra, Integer> {
 
-         return obra.getId();
-    }
-
-    @Override
-    public void setId(Obra obra, Integer integer) {
-            obra.setId(integer);
-    }
 }
