@@ -3,6 +3,7 @@ package utn.dan2021.proyectodan.Domain;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "USR_OBRA", schema = "MS-USR")
 public class Obra {
 
 	@Id
@@ -25,9 +26,8 @@ public class Obra {
 	private Integer superficie;
 
 	@OneToOne
+	@JoinColumn(name = "ID_TIPO_OBRA")
 	private TipoObra tipo;
-
-
 
 	@ManyToOne
 	private Cliente cliente;
@@ -71,9 +71,11 @@ public class Obra {
 	public TipoObra getTipo() {
 		return tipo;
 	}
-	public void setTipo(TipoObra tipo) {
-		this.tipo = tipo;
+
+	public void setTipo(TipoObra tipo1) {
+		tipo = tipo1;
 	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}

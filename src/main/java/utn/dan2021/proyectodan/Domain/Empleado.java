@@ -3,6 +3,7 @@ package utn.dan2021.proyectodan.Domain;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "USR_EMPLEADO", schema = "MS-USR")
 public class Empleado {
 
 	@Id

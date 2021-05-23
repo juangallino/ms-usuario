@@ -56,10 +56,7 @@ public class ObraRest {
     @ApiOperation(value = "Busca un Cliente por id de la Obra")
     public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra) {
 
-        /*Optional<Obra> c =  obraService.listarObras()
-                .stream()
-                .filter(Obra -> Obra.getId().equals(idObra))
-                .findFirst();*/
+
         try {
             Obra obra = obraService.buscarObraPorId(idObra);
             return ResponseEntity.ok(obra.getCliente());

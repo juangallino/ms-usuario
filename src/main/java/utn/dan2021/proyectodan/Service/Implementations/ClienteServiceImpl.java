@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utn.dan2021.proyectodan.Domain.Cliente;
+import utn.dan2021.proyectodan.Domain.TipoUsuario;
+import utn.dan2021.proyectodan.Domain.Usuario;
 import utn.dan2021.proyectodan.Service.ClienteService;
 import utn.dan2021.proyectodan.Service.RiesgoCrediticioService;
 import utn.dan2021.proyectodan.repository.ClienteRepository;
@@ -25,13 +27,27 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
 
+    public void guardarLazy(Cliente c){
+        System.out.println("entro "+c.getId());
+        clienteRepository.save(c);
+        System.out.println("salio "+c.getId());
+    }
+
     @Override
     public Cliente guardarCliente(Cliente c) throws Exception {
         //si no existe el cliente los creamos POST
+
         if(!(c.getId()!=null && c.getId()>0)){
                 if (!riesgoCrediticioService.reporteAFIPPositivo(c.getCuit())){throw new Exception("AFIP");}
                 if (!riesgoCrediticioService.reporteBCRAPositivo(c.getCuit())){ throw new Exception("BCRA");}
                 if (!riesgoCrediticioService.reporteVerazPositivo(c.getCuit())){ throw new Exception("VERAZ");  }
+
+
+            //CREAR Y SETEAR USUSARIO A CLIENTE
+            Usuario usr = new Usuario();
+                usr.setUser(c.getMail());
+                usr.setPassword("1234");
+                c.setUser(usr);
 
             clienteRepository.save(c);
 
@@ -56,11 +72,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public void bajaCliente(Integer id) throws Exception {
 
-        /*
-        try {
-            clienteRepository.deleteById(id);
-            }catch (Exception e){throw new Exception("no funco");}
-*/
+        //TODO VERIFICAR QUE NO TIENE UN PEDIDO PENDIENTE ANTES DE ELIMINAR
         if (clienteRepository.findById(id).isPresent()){
             clienteRepository.deleteById(id);
         }else throw new Exception("no funco");

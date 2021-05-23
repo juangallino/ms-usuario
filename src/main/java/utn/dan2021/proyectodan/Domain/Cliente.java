@@ -5,6 +5,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "USR_CLIENTE", schema = "MS-USR")
 public class Cliente  {
 
 	@Id
@@ -25,9 +26,7 @@ public class Cliente  {
 	@OneToOne
 	private Usuario user;
 
-
-	@OneToMany
-	@JoinColumn(name = "obras_ID")
+	@OneToMany(mappedBy ="cliente")
 	private List<Obra> obras;
 
 
