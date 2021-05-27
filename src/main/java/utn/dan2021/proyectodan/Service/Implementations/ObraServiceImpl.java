@@ -66,5 +66,12 @@ public class ObraServiceImpl implements ObraService {
 
     }
 
+    @Override
+    public List<Obra> listarObrasDeCliente(Integer id_cliente) {
+
+     return   obraRepository.findObrasByCliente_Id(id_cliente);
+
+    }
+
 
 }

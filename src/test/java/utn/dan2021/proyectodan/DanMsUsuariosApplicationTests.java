@@ -12,16 +12,6 @@ class DanMsUsuariosApplicationTests {
 	void contextLoads() {
 		System.out.println("Hola proyecto spring");
 
-		ClienteServiceImpl clienteService = new ClienteServiceImpl();
 
-
-		Cliente cl = new Cliente();
-		cl.setId(1);
-		cl.setMail("el juango @gmial.com");
-		cl.setCuit("285489dfr");
-
-		clienteService.guardarLazy(cl);
-
-	}
-
+}
 }

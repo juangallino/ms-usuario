@@ -1,6 +1,8 @@
 package utn.dan2021.proyectodan.Domain;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -23,11 +25,15 @@ public class Cliente  {
 	@Column
 	private Boolean habilitadoOnline;
 
+	@Column(columnDefinition ="DATE")
+	private LocalDate fechaBaja;
+
 	@OneToOne
 	private Usuario user;
-
 	@OneToMany(mappedBy ="cliente")
 	private List<Obra> obras;
+
+
 
 
 	public Integer getId() {
@@ -84,6 +90,13 @@ public class Cliente  {
 	}
 	public void setObras(List<Obra> obras) {
 		this.obras = obras;
+	}
+
+	public LocalDate getFechaBaja() {
+		return fechaBaja;
+	}
+	public void setFechaBaja(LocalDate fechaBaja) {
+		this.fechaBaja = fechaBaja;
 	}
 
 

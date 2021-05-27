@@ -82,7 +82,7 @@ public class ClienteRest {
 
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina un cliente")
-    public ResponseEntity<String> borrar(@PathVariable Integer id) {
+    public ResponseEntity<String> bajaCliente(@PathVariable Integer id) {
         try {
             clienteService.bajaCliente(id);
             String respuesta = "ok "+id;
