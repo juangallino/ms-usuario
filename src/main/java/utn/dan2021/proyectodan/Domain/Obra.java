@@ -25,11 +25,11 @@ public class Obra {
 	@Column
 	private Integer superficie;
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "ID_TIPO_OBRA")
 	private TipoObra tipo;
 
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE},fetch =FetchType.LAZY)
 	private Cliente cliente;
 
 	public Integer getId() {
@@ -80,7 +80,9 @@ public class Obra {
 		return cliente;
 	}
 	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+		if(this.cliente!=cliente){
+		this.cliente = cliente;}
+		if(!cliente.getObras().contains(this)){cliente.addObra(this);}
 	}
 
 

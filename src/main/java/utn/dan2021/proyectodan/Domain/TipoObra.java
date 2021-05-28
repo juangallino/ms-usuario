@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class TipoObra {
 
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	//@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 	@Column
 	private String descripcion;
@@ -22,7 +22,6 @@ public class TipoObra {
 	public String getDescripcion() {
 		return descripcion;
 	}
-
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
