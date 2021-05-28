@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import utn.dan2021.proyectodan.Domain.Obra;
 import utn.dan2021.proyectodan.Service.ObraService;
 import utn.dan2021.proyectodan.repository.ObraRepository;
+import utn.dan2021.proyectodan.repository.TipoObraRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,14 @@ public class ObraServiceImpl implements ObraService {
 
     @Autowired
     ObraRepository obraRepository;
+    @Autowired
+    TipoObraRepository tipoObraRepository;
 
     @Override
     public Obra guardarObra(Obra obra) throws Exception {
 
         try{
+                 obra.setTipo(tipoObraRepository.getOne(obra.getTipo().getId()));
             obraRepository.save(obra);
             return  obra;
         }
