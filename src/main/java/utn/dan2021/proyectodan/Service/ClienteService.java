@@ -9,7 +9,7 @@ import java.util.List;
 public interface ClienteService {
     public Cliente guardarCliente(Cliente c) throws Exception;
 
-    public void bajaCliente(Integer id) throws Exception;
+    public Boolean bajaCliente(Integer id) throws Exception;
 
     public void actualizarCliente(Cliente cliente, Integer Id);
 

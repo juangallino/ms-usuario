@@ -16,7 +16,7 @@ public class Usuario {
 	@Column
 	private String password;
 
-	@OneToOne
+	@ManyToOne
 	private TipoUsuario tipoUsuario;
 
 	public TipoUsuario getTipoUsuario() {

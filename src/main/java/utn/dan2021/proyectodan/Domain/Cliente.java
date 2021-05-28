@@ -28,13 +28,26 @@ public class Cliente  {
 	@Column(columnDefinition ="DATE")
 	private LocalDate fechaBaja;
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	private Usuario user;
-	@OneToMany(mappedBy ="cliente")
+
+	@OneToMany(mappedBy ="cliente",cascade = {CascadeType.MERGE},fetch = FetchType.LAZY)
 	private List<Obra> obras;
 
-
-
+	@Override
+	public String toString() {
+		return "Cliente{" +
+				"id=" + id +
+				", razonSocial='" + razonSocial + '\'' +
+				", cuit='" + cuit + '\'' +
+				", mail='" + mail + '\'' +
+				", maxCuentaCorriente=" + maxCuentaCorriente +
+				", habilitadoOnline=" + habilitadoOnline +
+				", fechaBaja=" + fechaBaja +
+				", user=" + user +
+				", obras=" + obras +
+				'}';
+	}
 
 	public Integer getId() {
 		return id;
@@ -97,6 +110,13 @@ public class Cliente  {
 	}
 	public void setFechaBaja(LocalDate fechaBaja) {
 		this.fechaBaja = fechaBaja;
+	}
+
+	public void addObra(Obra o){
+		if(!obras.contains(o)){
+			obras.add(o);
+		}
+		o.setCliente(this);
 	}
 
 

@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import utn.dan2021.proyectodan.Domain.Cliente;
 
 import utn.dan2021.proyectodan.Domain.Obra;
+import utn.dan2021.proyectodan.Domain.TipoUsuario;
 import utn.dan2021.proyectodan.Domain.Usuario;
 import utn.dan2021.proyectodan.Service.ClienteService;
 import utn.dan2021.proyectodan.Service.ObraService;
@@ -17,6 +18,7 @@ import utn.dan2021.proyectodan.Service.RiesgoCrediticioService;
 import utn.dan2021.proyectodan.repository.ClienteRepository;
 
 import org.springframework.http.ResponseEntity;
+import utn.dan2021.proyectodan.repository.TipoUsrRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     ClienteRepository clienteRepository;
+    @Autowired
+    TipoUsrRepository tipoUsrRepository;
 
     @Autowired
     ObraService obraService;
@@ -61,14 +65,19 @@ public class ClienteServiceImpl implements ClienteService {
            //validacion cliente debe tener obra
             if (c.getObras().isEmpty()) {  throw new Exception("SIN OBRAS"); }
 
+            Obra o =  c.getObras().get(0);
+            o.setCliente(c);
+            obraService.guardarObra(o);     //por alguna razon el orm no activa
 
-                //CREAR Y SETEAR USUSARIO A CLIENTE
-                Usuario usr = new Usuario();
-                usr.setUser(c.getMail());
-                usr.setPassword("1234");
-                c.setUser(usr);
 
-                clienteRepository.save(c);
+            //CREAR Y SETEAR USUSARIO A CLIENTE
+            Usuario usr = new Usuario();
+            usr.setUser(c.getMail());
+            usr.setPassword("1234");
+            usr.setTipoUsuario( tipoUsrRepository.getOne(1));
+            c.setUser(usr);
+
+            clienteRepository.save(c);
 
             }
             //si ya existe el cliente lo editamos PUT
@@ -90,7 +99,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
-    public void bajaCliente(Integer id_cliente) throws Exception {
+    public Boolean bajaCliente(Integer id_cliente) throws Exception {
 
         //TODO VERIFICAR QUE NO TIENE UN PEDIDO PENDIENTE ANTES DE ELIMINAR
 
@@ -100,13 +109,16 @@ public class ClienteServiceImpl implements ClienteService {
 
         // si obtuvimos el cliente
         if (cl.isPresent()) {
-            //si el cliente esta activo
-            if (checkClienteActivo(id_cliente)) {
+            //si el cliente NO ESTA ACTIVO se elimina
+            if (!checkClienteActivo(id_cliente)) {
                 clienteRepository.deleteById(id_cliente);
-            } else {         //SI NO ESTA ACTIVO LE ASIGNAMOS FECHA de BAJA
+                return true;
+            } else {         //SI  ESTA ACTIVO LE ASIGNAMOS FECHA de BAJA
                                  Cliente aux=cl.get();
                                  aux.setFechaBaja(LocalDate.now().plusDays(20));
                                  actualizarCliente(aux, id_cliente);
+                                 System.out.println(aux.toString());
+                                 return false;
 
                     }
         }else throw new Exception("cliente not found");
