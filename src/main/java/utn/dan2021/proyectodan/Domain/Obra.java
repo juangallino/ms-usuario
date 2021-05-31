@@ -29,7 +29,7 @@ public class Obra {
 	@JoinColumn(name = "ID_TIPO_OBRA")
 	private TipoObra tipo;
 
-	@ManyToOne(cascade = {CascadeType.MERGE},fetch =FetchType.LAZY)
+	@ManyToOne(fetch =FetchType.LAZY)
 	private Cliente cliente;
 
 	public Integer getId() {
