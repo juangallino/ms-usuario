@@ -18,6 +18,7 @@ import utn.dan2021.proyectodan.Service.RiesgoCrediticioService;
 import utn.dan2021.proyectodan.repository.ClienteRepository;
 
 import org.springframework.http.ResponseEntity;
+import utn.dan2021.proyectodan.repository.TipoObraRepository;
 import utn.dan2021.proyectodan.repository.TipoUsrRepository;
 
 import java.time.LocalDate;
@@ -41,6 +42,9 @@ public class ClienteServiceImpl implements ClienteService {
     TipoUsrRepository tipoUsrRepository;
 
     @Autowired
+    TipoObraRepository tipoObraRepository;
+
+    @Autowired
     ObraService obraService;
 
 
@@ -62,12 +66,21 @@ public class ClienteServiceImpl implements ClienteService {
             if (!riesgoCrediticioService.reporteAFIPPositivo(c.getCuit())) {throw new Exception("AFIP");}
             if (!riesgoCrediticioService.reporteBCRAPositivo(c.getCuit())) {throw new Exception("BCRA");}
             if (!riesgoCrediticioService.reporteVerazPositivo(c.getCuit())) {throw new Exception("VERAZ");}
-           //validacion cliente debe tener obra
-            if (c.getObras().isEmpty()) {  throw new Exception("SIN OBRAS"); }
 
-            Obra o =  c.getObras().get(0);
-            o.setCliente(c);
-            obraService.guardarObra(o);     //por alguna razon el orm no activa
+            //validacion cliente debe tener obra
+
+            if (c.getObras()==null || c.getObras().isEmpty()) {  throw new Exception("SIN OBRAS"); }
+
+            for (Obra o: c.getObras() ) {
+                o.setCliente(c);
+                o.setTipo(tipoObraRepository.getOne(o.getTipo().getId()));
+            }
+
+           // Obra o =  c.getObras().get(0);
+          //  o.setCliente(c);
+            //o.setTipo(tipoObraRepository.getOne(o.getTipo().getId()));
+           // obraService.guardarObra(o);     //por alguna razon el orm no activa
+
 
 
             //CREAR Y SETEAR USUSARIO A CLIENTE
@@ -114,12 +127,14 @@ public class ClienteServiceImpl implements ClienteService {
                 clienteRepository.deleteById(id_cliente);
                 return true;
             } else {         //SI  ESTA ACTIVO LE ASIGNAMOS FECHA de BAJA
-                                 Cliente aux=cl.get();
-                                 aux.setFechaBaja(LocalDate.now().plusDays(20));
-                                 actualizarCliente(aux, id_cliente);
-                                 System.out.println(aux.toString());
-                                 return false;
+                        if (cl.get().getFechaBaja() == null) {
+                                Cliente aux = cl.get();
+                                aux.setFechaBaja(LocalDate.now().plusDays(5));
+                                actualizarCliente(aux, id_cliente);
+                                System.out.println(aux.toString());
 
+                        }
+                        return false;
                     }
         }else throw new Exception("cliente not found");
 
@@ -137,7 +152,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .map(o->o.getId().toString())
                 .collect(Collectors.toList());
 
-        /*//******************************************************
+        /*  //******************************************************
             // Create a character list
             List<Character> ch = Arrays.asList('G', 'e', 'e', 'k', 's',
                     'f', 'o', 'r',
@@ -193,24 +208,27 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente buscarClientePorCuit(String cuit) {
 
-        List<Cliente> aux = new ArrayList<>();
+      /*  List<Cliente> aux = new ArrayList<>();
         clienteRepository.findAll().forEach(cliente -> aux.add(cliente));				//CONVERT ITERABLE TO lIST
 
         return aux.stream()
                 .filter(cliente->cliente.getCuit().equals(cuit))
                 .findFirst()
-                .get();
+                .get();*/
+        return clienteRepository.findFirstByCuitAndFechaBaja(cuit, null);
     }
 
     @Override
     public Cliente buscarClientePorRazonSocial(String rz) {
-        List<Cliente> aux = new ArrayList<>();
+       /* List<Cliente> aux = new ArrayList<>();
         clienteRepository.findAll().forEach(cliente -> aux.add(cliente));				//CONVERT ITERABLE TO lIST
 
         return aux.stream()
                 .filter(cliente->cliente.getRazonSocial().equals(rz))
                 .findFirst()
-                .get();
+                .get();*/
 
+
+        return clienteRepository.findFirstByRazonSocialAndFechaBaja(rz,null);
     }
 }
