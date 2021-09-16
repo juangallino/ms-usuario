@@ -1,5 +1,7 @@
 package utn.dan2021.proyectodan.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,7 +33,8 @@ public class Cliente  {
 	@OneToOne(cascade = {CascadeType.ALL})
 	private Usuario user;
 
-	@OneToMany(mappedBy ="cliente",cascade = {CascadeType.MERGE},fetch = FetchType.LAZY)
+	@OneToMany(mappedBy ="cliente",cascade = {CascadeType.ALL},orphanRemoval = true)//,orphanRemoval = true,cascade = {CascadeType.MERGE},fetch = FetchType.LAZY)
+	//@JsonIgnore
 	private List<Obra> obras;
 
 	@Override

@@ -1,5 +1,7 @@
 package utn.dan2021.proyectodan.Domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,11 +27,12 @@ public class Obra {
 	@Column
 	private Integer superficie;
 
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne
 	@JoinColumn(name = "ID_TIPO_OBRA")
 	private TipoObra tipo;
 
-	@ManyToOne(fetch =FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.ALL})
+	@JsonBackReference	//  Anotación para marcar que esta propiedad se debe ignorar al serializar, evitando referencias recursivas en loop
 	private Cliente cliente;
 
 	public Integer getId() {
