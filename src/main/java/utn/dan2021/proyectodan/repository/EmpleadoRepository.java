@@ -1,20 +1,11 @@
 package utn.dan2021.proyectodan.repository;
 
-import frsf.isi.dan.InMemoryRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import utn.dan2021.proyectodan.Domain.Empleado;
 
 
 @Repository
-public class EmpleadoRepository extends InMemoryRepository<Empleado> {
-    @Override
-    public Integer getId(Empleado empleado) {
+public interface EmpleadoRepository extends JpaRepository<Empleado, Integer> {
 
-       return empleado.getId();
-    }
-
-    @Override
-    public void setId(Empleado empleado, Integer integer) {
-            empleado.setId(integer);
-    }
 }

@@ -52,9 +52,9 @@ public class ClienteRest {
         if(nuevo.getObras().isEmpty()) {
             return ResponseEntity.badRequest().body("No se posee informacion de la obra");
         }
-        if(nuevo.getUser().getUser().isEmpty() || nuevo.getUser().getPassword().isEmpty() ) {
+        /*if(nuevo.getUser().getUser().isEmpty() || nuevo.getUser().getPassword().isEmpty() ) {
             return ResponseEntity.badRequest().body("EL cliente no tiene usuario y contraseña");
-        }
+        }*/
 
         clienteService.guardarCliente(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
@@ -82,11 +82,17 @@ public class ClienteRest {
 
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina un cliente")
-    public ResponseEntity<String> borrar(@PathVariable Integer id) {
+    public ResponseEntity<String> bajaCliente(@PathVariable Integer id) {
         try {
-            clienteService.bajaCliente(id);
-            String respuesta = "ok "+id;
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(respuesta );
+
+           if (clienteService.bajaCliente(id)){
+               String respuesta = "Se borro satisfactoriamente el cliente "+id;
+               return ResponseEntity.status(HttpStatus.ACCEPTED).body(respuesta );
+
+                       }else {
+                           String respuesta = "No se puedo borrar poque es un cliente activo. Se le asigno fecha de baja "+id;
+                           return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(respuesta );}
+
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

@@ -28,38 +28,33 @@ public class ObraRest {
     @Autowired
     ObraService obraService;
 
-                                    // GETS
+    // GETS
     //-------------------------------------------------------------------------------------------------------------------------------------------------
 
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca una Obra por id")
-    public ResponseEntity<Obra> ObraPorId(@PathVariable Integer id){
+    public ResponseEntity<Obra> ObraPorId(@PathVariable Integer id) {
 
-        try{
-        return ResponseEntity.ok(obraService.buscarObraPorId(id));
-    }catch (Exception e) {
+        try {
+            return ResponseEntity.ok(obraService.buscarObraPorId(id));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping
     @ApiOperation(value = "Busca todos las Obras")
-    public ResponseEntity<List<Obra>> todos(){
+    public ResponseEntity<List<Obra>> todos() {
 
         return ResponseEntity.ok(obraService.listarObras());
     }
-
-
 
 
     @GetMapping(path = "/cliente/{idObra}")
     @ApiOperation(value = "Busca un Cliente por id de la Obra")
     public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra) {
 
-        /*Optional<Obra> c =  obraService.listarObras()
-                .stream()
-                .filter(Obra -> Obra.getId().equals(idObra))
-                .findFirst();*/
+
         try {
             Obra obra = obraService.buscarObraPorId(idObra);
             return ResponseEntity.ok(obra.getCliente());
@@ -89,21 +84,23 @@ public class ObraRest {
 
     }*/
 
-                                // POST
+    // POST
     //-------------------------------------------------------------------------------------------------------------------------------------------------
 
     @PostMapping
     @ApiOperation(value = "Alta de una Obra ")
     public ResponseEntity<String> crear(@RequestBody Obra obra) throws Exception {
-        System.out.println(" crear Empleado "+obra);
+        System.out.println(" crear Empleado " + obra);
 
-        try{
+        try {
             obraService.guardarObra(obra);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();}
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
-                            //PUT
+
+    //PUT
     //-------------------------------------------------------------------------------------------------------------------------------------------------
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza una Obra")
@@ -112,32 +109,50 @@ public class ObraRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<String> actualizar(@RequestBody Obra obra,  @PathVariable Integer id)  {
+    public ResponseEntity<String> actualizar(@RequestBody Obra obra, @PathVariable Integer id) {
 
-        try{
+        try {
             obraService.actualizarObra(obra, id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
-       }catch (Exception e){
-            return ResponseEntity.notFound().build();}
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
 
     }
 
 
-                                //DELETE
+    //DELETE
     //-------------------------------------------------------------------------------------------------------------------------------------------------
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina una Obra")
-    public ResponseEntity<String> borrar(@PathVariable Integer id){
+    public ResponseEntity<String> borrar(@PathVariable Integer id) {
         try {
             obraService.bajaObra(id);
-            String respuesta = "ok "+id;
-            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta );
+            String respuesta = "ok " + id;
+            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+
+    //Rest EXTRAS
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+
+    @GetMapping(path = "/pedidos/cliente/{idObra}")
+    @ApiOperation(value = "Busca un Cliente por id de la Obra Y DEVUELVE EL MAXIMO DE CUENTA CORRIENTE HABILITADO")
+    public ResponseEntity<Double> calcularSaldoNegativoCliente(@PathVariable Integer idObra) {
+
+
+        try {
+            Obra obra = obraService.buscarObraPorId(idObra);
+            return ResponseEntity.ok(obra.getCliente().getMaxCuentaCorriente());
+
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-
-
+}
