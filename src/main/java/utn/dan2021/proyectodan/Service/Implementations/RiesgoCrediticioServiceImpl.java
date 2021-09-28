@@ -1,20 +1,22 @@
 package utn.dan2021.proyectodan.Service.Implementations;
 
+import org.springframework.stereotype.Service;
 import utn.dan2021.proyectodan.Service.RiesgoCrediticioService;
 
+@Service
 public class RiesgoCrediticioServiceImpl implements RiesgoCrediticioService {
     @Override
     public Boolean reporteVerazPositivo(String cuit) {
-        return null;
+        return true;
     }
 
     @Override
     public Boolean reporteBCRAPositivo(String cuit) {
-        return null;
+        return true;
     }
 
     @Override
     public Boolean reporteAFIPPositivo(String cuit) {
-        return null;
+        return true;
     }
 }

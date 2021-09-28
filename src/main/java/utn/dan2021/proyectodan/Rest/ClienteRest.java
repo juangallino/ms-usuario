@@ -1,10 +1,7 @@
 package utn.dan2021.proyectodan.Rest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +20,7 @@ import utn.dan2021.proyectodan.Service.ClienteService;
 @Api(value = "ClienteRest", description = "Permite gestionar los clientes de la empresa")
 public class ClienteRest {
 
-    private static final List<Cliente> listaClientes = new ArrayList<>();
-    private static Integer ID_GEN = 1;
+
 
 
     @Autowired
@@ -35,38 +31,30 @@ public class ClienteRest {
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Cliente> clientePorId(@PathVariable Integer id){
 
-        Optional<Cliente> c =  listaClientes
-                .stream()
-                .filter(unCli -> unCli.getId().equals(id))
-                .findFirst();
 
-        return ResponseEntity.of(c);
-        //Cliente cl = clienteService.buscarClientePorId(id);
-        //return ResponseEntity.ok(cl);
+        Cliente cl = clienteService.buscarClientePorId(id);
+        return ResponseEntity.ok(cl);
     }
 
     @GetMapping
-    @ApiOperation(value = "Busta todos los clientes")
+    @ApiOperation(value = "Busca todos los clientes")
     public ResponseEntity<List<Cliente>> todos(){
 
-        return ResponseEntity.ok(listaClientes);
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
 
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
-    public ResponseEntity<String> crear(@RequestBody Cliente nuevo){
+    public ResponseEntity<String> crear(@RequestBody Cliente nuevo) throws Exception {
         System.out.println(" crear cliente "+nuevo);
-        nuevo.setId(ID_GEN++);
-        listaClientes.add(nuevo);
-
 
         if(nuevo.getObras().isEmpty()) {
             return ResponseEntity.badRequest().body("No se posee informacion de la obra");
         }
-        if(nuevo.getUser().getUser().isEmpty() || nuevo.getUser().getPassword().isEmpty() ) {
+        /*if(nuevo.getUser().getUser().isEmpty() || nuevo.getUser().getPassword().isEmpty() ) {
             return ResponseEntity.badRequest().body("EL cliente no tiene usuario y contraseña");
-        }
+        }*/
 
         clienteService.guardarCliente(nuevo);
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
@@ -80,31 +68,32 @@ public class ClienteRest {
             @ApiResponse(code = 401, message = "No autorizado"),
             @ApiResponse(code = 403, message = "Prohibido"),
             @ApiResponse(code = 404, message = "El ID no existe")})
-    public ResponseEntity<Cliente> actualizar(@RequestBody Cliente nuevo,  @PathVariable Integer id){
+    public ResponseEntity<String> actualizar(@RequestBody Cliente unCliente,  @PathVariable Integer id) {
 
-        OptionalInt indexOpt =   IntStream.range(0, listaClientes.size())
-                .filter(i -> listaClientes.get(i).getId().equals(id))
-                .findFirst();
-
-        if(indexOpt.isPresent()){
-            listaClientes.set(indexOpt.getAsInt(), nuevo);
-            return ResponseEntity.ok(nuevo);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            clienteService.actualizarCliente(unCliente,id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.FOUND).body("FAIL");
         }
+
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
     }
 
     @DeleteMapping(path = "/{id}")
-    @ApiOperation(value = "Actualiza un cliente")
-    public ResponseEntity<Cliente> borrar(@PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, listaClientes.size())
-                .filter(i -> listaClientes.get(i).getId().equals(id))
-                .findFirst();
+    @ApiOperation(value = "Elimina un cliente")
+    public ResponseEntity<String> bajaCliente(@PathVariable Integer id) {
+        try {
 
-        if(indexOpt.isPresent()){
-            listaClientes.remove(indexOpt.getAsInt());
-            return ResponseEntity.ok().build();
-        } else {
+           if (clienteService.bajaCliente(id)){
+               String respuesta = "Se borro satisfactoriamente el cliente "+id;
+               return ResponseEntity.status(HttpStatus.ACCEPTED).body(respuesta );
+
+                       }else {
+                           String respuesta = "No se puedo borrar poque es un cliente activo. Se le asigno fecha de baja "+id;
+                           return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(respuesta );}
+
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -114,15 +103,10 @@ public class ClienteRest {
     @ApiOperation(value = "Busca un cliente por cuit")
     public ResponseEntity<Cliente> clientePorCuit(@PathVariable String cuit){
 
-        Optional<Cliente> c =  listaClientes
-                .stream()
-                .filter(unCli -> unCli.getCuit().equals(cuit))
-                .findFirst();
-      //  return ResponseEntity.of(c);
-        if(c.isPresent()){
+        try {
+           return ResponseEntity.ok(clienteService.buscarClientePorCuit(cuit));
 
-            return ResponseEntity.of(c);
-        } else {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
 
@@ -132,14 +116,10 @@ public class ClienteRest {
     @ApiOperation(value = "Busca un cliente por Razon Social utilizano qry")
     public ResponseEntity<Cliente> clientePorRazonSocial(@RequestParam(required = false, value = "rz") String rz){
 
-        Optional<Cliente> c =  listaClientes
-                .stream()
-                .filter(unCli -> unCli.getRazonSocial(). equals(rz))
-                .findFirst();
-        if(c.isPresent()){
+        try {
+                return ResponseEntity.ok(clienteService.buscarClientePorRazonSocial(rz));
 
-            return ResponseEntity.of(c);
-        } else {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
 

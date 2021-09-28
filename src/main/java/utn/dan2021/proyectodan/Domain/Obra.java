@@ -1,14 +1,35 @@
 package utn.dan2021.proyectodan.Domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "USR_OBRA", schema = "MS-USR")
 public class Obra {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column
 	private String descripcion;
+
+	@Column
 	private Float latitud;
+
+	@Column
 	private Float longitud;
+
+	@Column
 	private String direccion;
+
+	@Column
 	private Integer superficie;
+
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "ID_TIPO_OBRA")
 	private TipoObra tipo;
+
+	@ManyToOne(cascade = {CascadeType.MERGE},fetch =FetchType.LAZY)
 	private Cliente cliente;
 
 	public Integer getId() {
@@ -50,14 +71,18 @@ public class Obra {
 	public TipoObra getTipo() {
 		return tipo;
 	}
-	public void setTipo(TipoObra tipo) {
-		this.tipo = tipo;
+
+	public void setTipo(TipoObra tipo1) {
+		tipo = tipo1;
 	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
 	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+		if(this.cliente!=cliente){
+		this.cliente = cliente;}
+		if(!cliente.getObras().contains(this)){cliente.addObra(this);}
 	}
 
 
