@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utn.dan2021.proyectodan.Domain.Obra;
 import utn.dan2021.proyectodan.Service.ObraService;
+import utn.dan2021.proyectodan.repository.ClienteRepository;
 import utn.dan2021.proyectodan.repository.ObraRepository;
 import utn.dan2021.proyectodan.repository.TipoObraRepository;
 
@@ -20,11 +21,14 @@ public class ObraServiceImpl implements ObraService {
     ObraRepository obraRepository;
     @Autowired
     TipoObraRepository tipoObraRepository;
+    @Autowired
+    ClienteRepository clienteRepository;
 
     @Override
     public Obra guardarObra(Obra obra) throws Exception {
 
         try{
+                obra.setCliente(clienteRepository.getOne(obra.getCliente().getId()));
                  obra.setTipo(tipoObraRepository.getOne(obra.getTipo().getId()));
             obraRepository.save(obra);
             return  obra;
