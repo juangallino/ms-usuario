@@ -38,7 +38,7 @@ public class ObraRest {
         try {
             return ResponseEntity.ok(obraService.buscarObraPorId(id));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -61,10 +61,23 @@ public class ObraRest {
 
 
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @GetMapping(path = "/obrasCliente/{idcliente}")
+    @ApiOperation(value = "Busca todas las obras de un cliente")
+    public ResponseEntity<List<Obra>> obrasDeClientePorID(@PathVariable Integer idcliente) {
 
+
+        try {
+
+            return ResponseEntity.ok(obraService.listarObrasDeCliente(idcliente));
+
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 //todo ulitmo get de la guia 1   Busca un Obra por cliente o tipo de obra()ambos param"
   /*  @GetMapping(path = "qry")
     @ApiOperation(value = "Busca un Obra por cliente o tipo de obra()ambos param")
@@ -90,13 +103,12 @@ public class ObraRest {
     @PostMapping
     @ApiOperation(value = "Alta de una Obra ")
     public ResponseEntity<String> crear(@RequestBody Obra obra) throws Exception {
-        System.out.println(" crear Empleado " + obra);
 
         try {
             obraService.guardarObra(obra);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -115,7 +127,7 @@ public class ObraRest {
             obraService.actualizarObra(obra, id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
@@ -131,7 +143,7 @@ public class ObraRest {
             String respuesta = "ok " + id;
             return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -151,7 +163,7 @@ public class ObraRest {
 
 
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
