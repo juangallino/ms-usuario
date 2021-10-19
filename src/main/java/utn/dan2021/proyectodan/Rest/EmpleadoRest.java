@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 
 
 
-
+@CrossOrigin(maxAge = 86400)
 @RestController
 @RequestMapping("/api/empleado")
 @Api(value = "EmpleadoRest", description = "Permite gestionar los empelados de la empresa")
@@ -30,7 +30,7 @@ public class EmpleadoRest {
     @Autowired
     EmpleadoService empleadoService;
 
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Empleado> clientePorId(@PathVariable Integer id){
@@ -42,7 +42,7 @@ public class EmpleadoRest {
 
         }catch (Exception e){return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
     }
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping
     @ApiOperation(value = "Busta todos los clientes")
     public ResponseEntity<List<Empleado>> todos(){
@@ -51,7 +51,7 @@ public class EmpleadoRest {
 
     }
 
-
+    @CrossOrigin(maxAge = 86400)
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
     public ResponseEntity<String> crear(@RequestBody Empleado nuevo)  {
@@ -62,7 +62,7 @@ public class EmpleadoRest {
     }catch (Exception e){return ResponseEntity.status(HttpStatus.CONFLICT).build();}
     }
 
-
+    @CrossOrigin(maxAge = 86400)
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza un cliente")
     @ApiResponses(value = {
@@ -79,7 +79,7 @@ public class EmpleadoRest {
 
         }
     }
-
+    @CrossOrigin(maxAge = 86400)
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina una Obra")
     public ResponseEntity<String> borrar(@PathVariable Integer id){
@@ -92,7 +92,7 @@ public class EmpleadoRest {
         }
     }
 
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "qry")
     @ApiOperation(value = "Busca un empleado por nombre utilizano qry")
     public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false, value = "name") String name){

@@ -30,7 +30,7 @@ public class ObraRest {
 
     // GETS
     //-------------------------------------------------------------------------------------------------------------------------------------------------
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca una Obra por id")
     public ResponseEntity<Obra> ObraPorId(@PathVariable Integer id) {
@@ -41,7 +41,7 @@ public class ObraRest {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping
     @ApiOperation(value = "Busca todos las Obras")
     public ResponseEntity<List<Obra>> todos() {
@@ -49,7 +49,7 @@ public class ObraRest {
         return ResponseEntity.ok(obraService.listarObras());
     }
 
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/cliente/{idObra}")
     @ApiOperation(value = "Busca un Cliente por id de la Obra")
     public ResponseEntity<Cliente> clientePorIdObra(@PathVariable Integer idObra) {
@@ -64,6 +64,7 @@ public class ObraRest {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/obrasCliente/{idcliente}")
     @ApiOperation(value = "Busca todas las obras de un cliente")
     public ResponseEntity<List<Obra>> obrasDeClientePorID(@PathVariable Integer idcliente) {
@@ -99,7 +100,7 @@ public class ObraRest {
 
     // POST
     //-------------------------------------------------------------------------------------------------------------------------------------------------
-
+    @CrossOrigin(maxAge = 86400)
     @PostMapping
     @ApiOperation(value = "Alta de una Obra ")
     public ResponseEntity<String> crear(@RequestBody Obra obra) throws Exception {
@@ -114,6 +115,7 @@ public class ObraRest {
 
     //PUT
     //-------------------------------------------------------------------------------------------------------------------------------------------------
+    @CrossOrigin(maxAge = 86400)
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza una Obra")
     @ApiResponses(value = {
@@ -135,6 +137,7 @@ public class ObraRest {
 
     //DELETE
     //-------------------------------------------------------------------------------------------------------------------------------------------------
+    @CrossOrigin(maxAge = 86400)
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina una Obra")
     public ResponseEntity<String> borrar(@PathVariable Integer id) {
@@ -151,7 +154,7 @@ public class ObraRest {
     //Rest EXTRAS
     //---------------------------------------------------------------------------------------------------------------------------------------
 
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/pedidos/cliente/{idObra}")
     @ApiOperation(value = "Busca un Cliente por id de la Obra Y DEVUELVE EL MAXIMO DE CUENTA CORRIENTE HABILITADO")
     public ResponseEntity<Double> calcularSaldoNegativoCliente(@PathVariable Integer idObra) {

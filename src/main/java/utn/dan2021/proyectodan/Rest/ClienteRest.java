@@ -26,7 +26,7 @@ public class ClienteRest {
     @Autowired
     ClienteService clienteService;
 
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "Busca un cliente por id")
     public ResponseEntity<Cliente> clientePorId(@PathVariable Integer id){
@@ -35,7 +35,7 @@ public class ClienteRest {
         Cliente cl = clienteService.buscarClientePorId(id);
         return ResponseEntity.ok(cl);
     }
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping
     @ApiOperation(value = "Busca todos los clientes")
     public ResponseEntity<List<Cliente>> todos(){
@@ -43,7 +43,7 @@ public class ClienteRest {
         return ResponseEntity.ok(clienteService.listarClientes());
     }
 
-
+    @CrossOrigin(maxAge = 86400)
     @PostMapping
     @ApiOperation(value = "Alta de un Cliente ")
     public ResponseEntity<String> crear(@RequestBody Cliente nuevo) throws Exception {
@@ -60,7 +60,7 @@ public class ClienteRest {
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
 
     }
-
+    @CrossOrigin(maxAge = 86400)
     @PutMapping(path = "/{id}")
     @ApiOperation(value = "Actualiza un cliente")
     @ApiResponses(value = {
@@ -79,7 +79,7 @@ public class ClienteRest {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("OK");
     }
-
+    @CrossOrigin(maxAge = 86400)
     @DeleteMapping(path = "/{id}")
     @ApiOperation(value = "Elimina un cliente")
     public ResponseEntity<String> bajaCliente(@PathVariable Integer id) {
@@ -99,6 +99,7 @@ public class ClienteRest {
     }
 
     //solicitado en guia 1
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "/cuit/{cuit}")
     @ApiOperation(value = "Busca un cliente por cuit")
     public ResponseEntity<Cliente> clientePorCuit(@PathVariable String cuit){
@@ -111,7 +112,7 @@ public class ClienteRest {
         }
 
     }
-
+    @CrossOrigin(maxAge = 86400)
     @GetMapping(path = "qry")
     @ApiOperation(value = "Busca un cliente por Razon Social utilizano qry")
     public ResponseEntity<Cliente> clientePorRazonSocial(@RequestParam(required = false, value = "rz") String rz){
