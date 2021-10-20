@@ -48,11 +48,8 @@ public class ClienteServiceImpl implements ClienteService {
     ObraService obraService;
 
 
-    private static final String PEDIDOS_REST_API_URL = "http://localhost:9000";
-    private static final String Pedido_ENDPOINT = "/api/pedido/";
-    //api rest pagos
-    private static final String PAGOS_REST_API_URL = "http://localhost:9003";
-    private static final String OBRA_ENDPOINnT = "/api/obra/";
+    private static final String PEDIDOS_REST_API_URL = "http://dan-gateway:8080/";
+    private static final String Pedido_ENDPOINT = "pedidos/api/pedido/";
     RestTemplate rest = new RestTemplate();
 
 
